@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <cmath>
-#include <trees/bst/Node.hpp>
+#include <trees/bst/BinarySearchTreeNode.hpp>
 #include <trees/bst/exceptions.hpp>
 
 template <typename T>
