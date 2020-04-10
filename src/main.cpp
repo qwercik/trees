@@ -2,6 +2,7 @@
 #include <vector>
 #include <trees/bst/Tree.hpp>
 #include <trees/io.hpp>
+#include <trees/bst/exceptions.hpp>
 
 template <typename T>
 void test(const std::vector<T>& values) {
