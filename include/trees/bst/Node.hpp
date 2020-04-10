@@ -12,18 +12,20 @@ struct BinarySearchTreeNode {
         this->value = value;
     }
 
-    void insert(BinarySearchTreeNode<T> *node) {
+    int insert(BinarySearchTreeNode<T> *node) {
         if (node->value < this->value) {
             if (this->left == nullptr) {
                 this->left = node;
+                return 1;
             } else {
-                this->left->insert(node);
+                return 1 + this->left->insert(node);
             }
         } else {
             if (this->right == nullptr) {
                 this->right = node;
+                return 1;
             } else {
-                this->right->insert(node);
+                return 1 + this->right->insert(node);
             }
         }
     }

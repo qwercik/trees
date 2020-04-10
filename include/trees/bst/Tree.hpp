@@ -14,30 +14,43 @@ public:
         this->clearPostOrder();
     }
 
-    void insert(T value) {
+    // Wstawia element do drzewa
+    // Zwraca długość gałęzi łączącej korzeń z nowo wstawionym elementem
+    int insert(T value) {
         if (this->root == nullptr) {
             this->root = new BinarySearchTreeNode<T>(value);
+            return 0;
         } else {
             auto node = new BinarySearchTreeNode<T>(value);
-            this->root->insert(node);
+            return this->root->insert(node);
         }
     }
 
+    // Wstawia listę elementów do drzewa
+    // Zwraca długość najdłuższej gałęzi łączącej korzeń z nowo wstawionym elementem
+    // Jeżeli drzewo było na początku puste, zwracana wartość jest wysokością drzewa.
+    // Jeżeli nie, nie ma takiej gwarancji
     template <typename Iterator>
-    void insertList(Iterator begin, Iterator end) {
+    int insertList(Iterator begin, Iterator end) {
         if (this->root == nullptr) {
             if (begin == end) {
-                return;
+                return 0;
             }
 
             this->root = new BinarySearchTreeNode<T>(*begin);
             ++begin;
         }
 
+        int height = 0;
         for (; begin < end; ++begin) {
             auto node = new BinarySearchTreeNode<T>(*begin);
-            this->root->insert(node);
+            auto branchHeight = this->root->insert(node);
+            if (branchHeight > height) {
+                height = branchHeight;
+            }
         }
+
+        return height;
     }
 
     std::vector<T> traversePreOrder() const {
