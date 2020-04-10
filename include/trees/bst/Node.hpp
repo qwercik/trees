@@ -4,110 +4,105 @@
 #include <trees/bst/exceptions.hpp>
 
 template <typename T>
-struct Node {
-    Node() {
+struct BinarySearchTreeNode {
+    BinarySearchTreeNode() {
     }
 
-    Node(T value) {
+    BinarySearchTreeNode(T value) {
         this->value = value;
     }
 
-    T value;
-    Node *left = nullptr;
-    Node *right = nullptr;
-
-    static void insert(Node<T> *root, Node<T> *node) {
-        if (node->value < root->value) {
-            if (root->left == nullptr) {
-                root->left = node;
+    void insert(BinarySearchTreeNode<T> *node) {
+        if (node->value < this->value) {
+            if (this->left == nullptr) {
+                this->left = node;
             } else {
-                insert(root->left, node);
+                this->left->insert(node);
             }
         } else {
-            if (root->right == nullptr) {
-                root->right = node;
+            if (this->right == nullptr) {
+                this->right = node;
             } else {
-                insert(root->right, node);
+                this->right->insert(node);
             }
         }
     }
 
-    static std::vector<T> traversePreOrder(Node<T> *root) {
+    std::vector<T> traversePreOrder() {
         std::vector<T> values;
 
-        values.push_back(root->value);
+        values.push_back(this->value);
 
-        if (root->left != nullptr) {
-            auto returnedValues = Node<T>::traversePreOrder(root->left);
+        if (this->left != nullptr) {
+            auto returnedValues = this->left->traversePreOrder();
             values.insert(values.end(), returnedValues.begin(), returnedValues.end());
         }
 
-
-        if (root->right != nullptr) {
-            auto returnedValues = Node<T>::traversePreOrder(root->right);
+        if (this->right != nullptr) {
+            auto returnedValues = this->right->traversePreOrder();
             values.insert(values.end(), returnedValues.begin(), returnedValues.end());
         }
 
         return values;
     }
 
-    static std::vector<T> traverseInOrder(Node<T> *root) {
+    std::vector<T> traverseInOrder() {
         std::vector<T> values;
 
-        if (root->left != nullptr) {
-            auto returnedValues = Node<T>::traverseInOrder(root->left);
+        if (this->left != nullptr) {
+            auto returnedValues = this->left->traverseInOrder();
             values.insert(values.end(), returnedValues.begin(), returnedValues.end());
         }
 
-        values.push_back(root->value);
+        values.push_back(this->value);
 
-        if (root->right != nullptr) {
-            auto returnedValues = Node<T>::traverseInOrder(root->right);
+        if (this->right != nullptr) {
+            auto returnedValues = this->right->traverseInOrder();
             values.insert(values.end(), returnedValues.begin(), returnedValues.end());
         }
 
         return values;
     }
 
-    static std::vector<T> traversePostOrder(Node<T> *root) {
+    std::vector<T> traversePostOrder() {
         std::vector<T> values;
 
-        if (root->left != nullptr) {
-            auto returnedValues = Node<T>::traversePostOrder(root->left);
+        if (this->left != nullptr) {
+            auto returnedValues = this->left->traversePostOrder();
             values.insert(values.end(), returnedValues.begin(), returnedValues.end());
         }
 
-        if (root->right != nullptr) {
-            auto returnedValues = Node<T>::traversePostOrder(root->right);
+        if (this->right != nullptr) {
+            auto returnedValues = this->right->traversePostOrder();
             values.insert(values.end(), returnedValues.begin(), returnedValues.end());
         }
 
-        values.push_back(root->value);
+        values.push_back(this->value);
 
         return values;
     }
 
-    // Zwraca nullptr, jeżeli to root jest szukanym elementem
-    static Node<T> *findParent(Node<T> *root, T value) {
-        if (value == root->value) {
+    // Zwraca nullptr, jeżeli to obecny węzeł jest szukanym elementem
+    BinarySearchTreeNode<T> *findParent(T value) {
+        if (value == this->value) {
             return nullptr;
-        } else if (value < root->value && root->left != nullptr) {
-            if (value == root->left->value) {
-                return root;
-            } else if (value < root->left->value && root->left->left != nullptr) {
-                return Node<T>::findParent(root->left, value);
-            } else if (value > root->left->value && root->left->right != nullptr) {
-                return Node<T>::findParent(root->left, value);
+        } else if (value < this->value && this->left != nullptr) {
+            if (value == this->left->value) {
+                return this;
+            } else if (value < this->left->value && this->left->left != nullptr) {
+                return this->left->findParent(value);
+            } else if (value > this->left->value && this->left->right != nullptr) {
+                return this->left->findParent(value);
             } else {
                 throw BinarySearchTreeElementNotExistException("Element not exist");
             }
-        } else if (value > root->value && root->right != nullptr) {
-            if (value == root->right->value) {
-                return root;
-            } else if (value < root->right->value && root->right->left != nullptr) {
-                return Node<T>::findParent(root->right, value);
-            } else if (value > root->right->value && root->right->right != nullptr) {
-                return Node<T>::findParent(root->right, value);
+        } else if (value > this->value && this->right != nullptr) {
+            if (value == this->right->value) {
+                return this;
+            } else if (value < this->right->value && this->right->left != nullptr) {
+                return this->right->findParent(value);
+            } else if (value > this->right->value && this->right->right != nullptr) {
+                return this->right->findParent(value);
             } else {
                 throw BinarySearchTreeElementNotExistException("Element not exist");
             }
@@ -116,86 +111,86 @@ struct Node {
         }
     }
 
-    static Node<T> *find(Node<T> *root, T value) {
-        if (value == root->value) {
-            return root;
-        } else if (value < root->value && root->left != nullptr) {
-            return Node<T>::find(root->left, value);
-        } else if (value > root->value && root->right != nullptr) {
-            return Node<T>::find(root->right, value);
+    BinarySearchTreeNode<T> *find(T value) {
+        if (value == this->value) {
+            return this;
+        } else if (value < this->value && this->left != nullptr) {
+            return this->left->find(value);
+        } else if (value > this->value && this->right != nullptr) {
+            return this->right->find(value);
         } else {
             throw BinarySearchTreeElementNotExistException("Element not exist");
         }
     }
 
-    static Node<T> *min(Node<T> *root) {
-        if (root->left != nullptr) {
-            return Node<T>::min(root->left);
+    BinarySearchTreeNode<T> *min() {
+        if (this->left != nullptr) {
+            return this->left->min();
         }
 
-        return root;
+        return this;
     }
 
     // Funkcja zwraca wskaźnik na węzeł, będący rodzicem najmniejszego elementu
     // Wykorzystywana głównie przez funkcję remove()
     // Jeżeli to obecny element (parametr) jest najmniejszy,
-    // to zwracany jest nullptr
-    static Node<T> *minParent(Node<T> *root) {
-        if (root->left != nullptr) {
-            if (root->left->left == nullptr) {
-                return root;
+    // to zwracany jest nullptr (bo nie znamy rodzica obecnego elementu)
+    BinarySearchTreeNode<T> *parentOfMin() {
+        if (this->left != nullptr) {
+            if (this->left->left == nullptr) {
+                return this;
             } else {
-                return Node<T>::minParent(root->left);
+                return this->left->parentOfMin();
             }
         } else {
             return nullptr;
         }
     }
 
-    static Node<T> *max(Node<T> *root) {
-        if (root->right != nullptr) {
-            return Node<T>::max(root->right);
+    BinarySearchTreeNode<T> *max() {
+        if (this->right != nullptr) {
+            return this->right->max();
         }
 
-        return root;
+        return this;
     }
 
-    static std::vector<T> trace(Node<T> *root, T value) {
-        std::vector<T> track = {root->value};
+    std::vector<T> trace(T value) {
+        std::vector<T> track = {this->value};
 
-        if (value < root->value && root->left != nullptr) {
-            auto subTrack = Node<T>::trace(root->left, value);
+        if (value < this->value && this->left != nullptr) {
+            auto subTrack = this->left->trace(value);
             track.insert(track.end(), subTrack.begin(), subTrack.end());
-        } else if (value > root->value && root->right != nullptr) {
-            auto subTrack = Node<T>::trace(root->right, value);
+        } else if (value > this->value && this->right != nullptr) {
+            auto subTrack = this->right->trace(value);
             track.insert(track.end(), subTrack.begin(), subTrack.end());
-        } else if (value != root->value) {
+        } else if (value != this->value) {
             throw BinarySearchTreeElementNotExistException("Element not exist");
         }
 
         return track;
     }
 
-    static bool contains(Node<T> *root, T value) {
-        if (value == root->value) {
+    bool contains(T value) {
+        if (value == this->value) {
             return true;
-        } else if (value < root->value && root->left != nullptr) {
-            return Node<T>::contains(root->left, value);
-        } else if (value > root->value && root->right != nullptr) {
-            return Node<T>::contains(root->right, value);
+        } else if (value < this->value && this->left != nullptr) {
+            return this->left->contains(value);
+        } else if (value > this->value && this->right != nullptr) {
+            return this->right->contains(value);
         } else {
             return false;
         }
     }
 
-    static int height(Node<T> *root) {
-        if (root->left != nullptr && root->right == nullptr) {
-            return 1 + Node<T>::height(root->left);
-        } else if (root->left == nullptr && root->right != nullptr) {
-            return 1 + Node<T>::height(root->right);
-        } else if (root->left != nullptr && root->right != nullptr) {
-            auto leftHeight = Node<T>::height(root->left);
-            auto rightHeight = Node<T>::height(root->right);
+    int height() {
+        if (this->left != nullptr && this->right == nullptr) {
+            return 1 + this->left->height();
+        } else if (this->left == nullptr && this->right != nullptr) {
+            return 1 + this->right->height();
+        } else if (this->left != nullptr && this->right != nullptr) {
+            auto leftHeight = this->left->height();
+            auto rightHeight = this->right->height();
 
             if (leftHeight > rightHeight) {
                 return 1 + leftHeight;
@@ -212,27 +207,27 @@ struct Node {
     // Zwracany jest wskaźnik na element, który go zastąpi
     // Wywołujący może zdealokować zaalokowaną dynamicznie pamięć,
     // bo posiada wskaźnik na usuwany węzeł
-    static Node<T> *remove(Node<T> *node) {
-        if (node->left == nullptr && node->right == nullptr) {
+    BinarySearchTreeNode<T> *remove() {
+        if (this->left == nullptr && this->right == nullptr) {
             return nullptr;
-        } else if (node->left != nullptr && node->right == nullptr) {
-            return node->left;
-        } else if (node->left == nullptr && node->right != nullptr) {
-            return node->right;
+        } else if (this->left != nullptr && this->right == nullptr) {
+            return this->left;
+        } else if (this->left == nullptr && this->right != nullptr) {
+            return this->right;
         } else {
-            auto successorParent = Node<T>::minParent(node->right);
-            Node<T> *successor;
+            auto successorParent = this->right->parentOfMin();
+            BinarySearchTreeNode<T> *successor;
 
             if (successorParent == nullptr) {
                 // successorParent = node;
-                successor = node->right;
+                successor = this->right;
             } else {
                 successor = successorParent->left;
-                successor->right = node->right;
+                successor->right = this->right;
                 successorParent->left = nullptr;                
             }
 
-            successor->left = node->left;
+            successor->left = this->left;
             
             return successor;
         }
@@ -240,27 +235,31 @@ struct Node {
 
     // Parametrem jest korzeń względem którego przeprowadzamy rotację
     // wartością zwaracaną jest wskaźnik na nowy korzeń
-    static Node<T> *rotateLeft(Node<T> *root) {
-        auto newRoot = root->right;
+    BinarySearchTreeNode<T> *rotateLeft() {
+        auto newRoot = this->right;
         if (newRoot == nullptr) {
             throw BinarySearchTreeRotationException("Cannot left rotate tree");
         }
 
-        root->right = newRoot->left;
-        newRoot->left = root;
+        this->right = newRoot->left;
+        newRoot->left = this;
         
         return newRoot;
     }
 
-    static Node<T> *rotateRight(Node<T> *root) {
-        auto newRoot = root->left;
+    BinarySearchTreeNode<T> *rotateRight() {
+        auto newRoot = this->left;
         if (newRoot == nullptr) {
             throw BinarySearchTreeRotationException("Cannot right rotate tree");
         }
 
-        root->left = newRoot->right;
-        newRoot->right = root;
+        this->left = newRoot->right;
+        newRoot->right = this;
         
         return newRoot;
     }
+
+    T value;
+    BinarySearchTreeNode *left = nullptr;
+    BinarySearchTreeNode *right = nullptr;
 };

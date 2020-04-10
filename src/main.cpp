@@ -27,6 +27,14 @@ void test(const std::vector<T>& values) {
 
         std::cout << "Height: " << tree.height() << "\n";
     }
+
+    tree.remove(4);
+    std::cout << "Po usunięciu: " << tree.traversePreOrder() << "\n";
+    tree.dsw();
+    std::cout << "PO DSW\n";
+    std::cout << "Pre-order: " << tree.traversePreOrder() << "\n";
+    std::cout << "Post-order: " << tree.traversePostOrder() << "\n";
+    std::cout << "Height: " << tree.height() << '\n';
 }
 
 int main() {

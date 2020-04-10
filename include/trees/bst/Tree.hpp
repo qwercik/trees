@@ -16,10 +16,10 @@ public:
 
     void insert(T value) {
         if (this->root == nullptr) {
-            this->root = new Node<T>(value);
+            this->root = new BinarySearchTreeNode<T>(value);
         } else {
-            auto node = new Node<T>(value);
-            Node<T>::insert(this->root, node);
+            auto node = new BinarySearchTreeNode<T>(value);
+            this->root->insert(node);
         }
     }
 
@@ -30,13 +30,13 @@ public:
                 return;
             }
 
-            this->root = new Node<T>(*begin);
+            this->root = new BinarySearchTreeNode<T>(*begin);
             ++begin;
         }
 
         for (; begin < end; ++begin) {
-            auto node = new Node<T>(*begin);
-            Node<T>::insert(this->root, node);
+            auto node = new BinarySearchTreeNode<T>(*begin);
+            this->root->insert(node);
         }
     }
 
@@ -44,7 +44,7 @@ public:
         if (this->root == nullptr) {
             return {};
         } else {
-            return Node<T>::traversePreOrder(this->root);
+            return this->root->traversePreOrder();
         }
     }
 
@@ -52,7 +52,7 @@ public:
         if (this->root == nullptr) {
             return {};
         } else {
-            return Node<T>::traverseInOrder(this->root);
+            return this->root->traverseInOrder();
         }
     }
 
@@ -60,7 +60,7 @@ public:
         if (this->root == nullptr) {
             return {};
         } else {
-            return Node<T>::traversePostOrder(this->root);
+            return this->root->traversePostOrder();
         }
     }
 
@@ -68,7 +68,7 @@ public:
         if (this->root == nullptr) {
             throw BinarySearchTreeEmptyException("Tree is empty");
         } else {
-            auto node = Node<T>::min(this->root);
+            auto node = this->root->min();
             return node->value;
         }
     }
@@ -77,7 +77,7 @@ public:
         if (this->root == nullptr) {
             throw BinarySearchTreeEmptyException("Tree is empty");
         } else {
-            auto node = Node<T>::max(this->root);
+            auto node = this->root->max();
             return node->value;
         }
     }
@@ -86,7 +86,7 @@ public:
         if (this->root == nullptr) {
             throw BinarySearchTreeElementNotExistException("Element not exist");
         } else {
-            return Node<T>::trace(this->root, value);
+            return this->root->trace(value);
         }
     }
 
@@ -94,7 +94,7 @@ public:
         if (this->root == nullptr) {
             return false;
         } else {
-            return Node<T>::contains(this->root, value);
+            return this->root->contains(value);
         }
     }
 
@@ -102,7 +102,7 @@ public:
         if (this->root == nullptr) {
             return -1;
         } else {
-            return Node<T>::height(this->root);
+            return this->root->height();
         }
     }
 
@@ -110,8 +110,8 @@ public:
         if (this->root == nullptr) {
             throw BinarySearchTreeEmptyException("Tree is empty");
         } else {
-            auto parentOfNodeToRemove = Node<T>::findParent(this->root, value);
-            Node<T> *nodeToRemove;
+            auto parentOfNodeToRemove = this->root->findParent(value);
+            BinarySearchTreeNode<T> *nodeToRemove;
             bool leftChild;
 
             if (parentOfNodeToRemove == nullptr) {
@@ -124,7 +124,7 @@ public:
                 leftChild = false;
             }
 
-            auto newNode = Node<T>::remove(nodeToRemove);
+            auto newNode = nodeToRemove->remove();
 
             if (nodeToRemove == this->root) {
                 if (nodeToRemove != nullptr) {
@@ -166,26 +166,26 @@ public:
             int size = 1;
 
             while (node->left != nullptr) {
-                node = Node<T>::rotateRight(node);     
+                node = node->rotateRight();     
             }
             this->root = node;
             
             for (; node->right != nullptr; node = node->right, ++size) {
                 while (node->right->left != nullptr) {
-                    node->right = Node<T>::rotateRight(node->right);
+                    node->right = node->right->rotateRight();
                 }
             }
 
             // TODO: Można to zamienić na prostą bitową operację
             int rotationsNumber = std::pow(2, std::floor(std::log2(size + 1))) - 1;
 
-            Node<T> parentOfRoot;
+            BinarySearchTreeNode<T> parentOfRoot;
 
             parentOfRoot.right = this->root;
             node = &parentOfRoot;
 
             for (int i = 0; i < rotationsNumber; ++i) {
-                node->right = Node<T>::rotateLeft(node->right);
+                node->right = node->right->rotateLeft();
 
                 if (node->right->right != nullptr && node->right->right->right != nullptr) {
                     node = node->right;
@@ -199,5 +199,5 @@ public:
     }
 
 private:
-    Node<T> *root = nullptr;
+    BinarySearchTreeNode<T> *root = nullptr;
 };
