@@ -1,7 +1,6 @@
 #include <string>
 #include <stdexcept>
 #include <trees/bst/exceptions.hpp>
-#include <iostream>
 
 BinarySearchTreeEmptyException::BinarySearchTreeEmptyException(
     const std::string& message

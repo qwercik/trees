@@ -1,14 +1,14 @@
 #include <iostream>
 #include <vector>
-#include <trees/bst/Tree.hpp>
-#include <trees/io.hpp>
+#include <trees/bst/BinarySearchTree.hpp>
 #include <trees/bst/exceptions.hpp>
+#include <trees/io.hpp>
 
-template <typename T>
+template <typename Tree, typename T>
 void test(const std::vector<T>& values) {
     std::cout << "Testowane wartości: " << values << "\n\n";
 
-    BinarySearchTree<T> tree;
+    Tree tree;
     tree.insertList(values.begin(), values.end());
 
     for (int i = 0; i < 2; ++i) {
@@ -39,6 +39,7 @@ void test(const std::vector<T>& values) {
 }
 
 int main() {
-    std::vector<int> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    test(values);
+    //std::vector<int> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector<int> values = {6, 3, 14, 1, 4, 8, 14, 7, 10};
+    test<BinarySearchTree<int>>(values);
 }

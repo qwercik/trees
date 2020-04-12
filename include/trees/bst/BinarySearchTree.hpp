@@ -8,7 +8,8 @@
 template <typename T>
 class BinarySearchTree {
 public:
-    BinarySearchTree() {}
+    BinarySearchTree() {
+    }
 
     ~BinarySearchTree() {
         this->clearPostOrder();
