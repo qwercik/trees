@@ -6,4 +6,5 @@ add_executable(
     trees
     src/main.cpp
     src/bst/exceptions.cpp
+    src/avl/exceptions.cpp
 )

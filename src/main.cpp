@@ -2,6 +2,8 @@
 #include <vector>
 #include <trees/bst/BinarySearchTree.hpp>
 #include <trees/bst/exceptions.hpp>
+#include <trees/avl/AvlTree.hpp>
+#include <trees/avl/exceptions.hpp>
 #include <trees/io.hpp>
 
 template <typename Tree, typename T>
@@ -39,16 +41,16 @@ void test(const std::vector<T>& values) {
 }
 
 int main() {
-    //std::vector<int> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    std::vector<int> values = {6, 3, 13, 1, 4, 8, 14, 7, 10};
-    //test<BinarySearchTree<int>>(values);
+    // std::vector<int> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::vector<int> values = {6, 5, 4, 3, 2, 1, 10, 9, 8, 7, };
 
-    BinarySearchTree<int> tree;
+    AvlTree<int> tree;
     tree.insertList(values.begin(), values.end());
+    
+    std::cout << tree.traversePreOrder() << '\n';
+    std::cout << "Wysokość: " << tree.height() << '\n';
 
-    std::cout << "Oryginał: " << tree.traversePreOrder() << "\n";
-    tree.remove(6);
-    std::cout << "Po usunięciu 6: " << tree.traversePreOrder() << "\n";
-    tree.remove(7);
-    std::cout << "Po usunięciu 7: " << tree.traversePreOrder() << "\n";
+    BinarySearchTree<int> b;
+    b.insertList(values.begin(), values.end());
+    std::cout << "Powinno wyjść: " << b.height() << "\n";
 }
