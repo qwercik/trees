@@ -219,17 +219,23 @@ struct BinarySearchTreeNode {
         } else {
             auto successorParent = this->right->parentOfMin();
             BinarySearchTreeNode<T> *successor;
+            // następnik (successor) na pewno nie ma lewego dziecka, więc można wartość wskaźnika nadpisywać
+            // Za to może mieć prawe dziecko, więc trzeba pamiętać, żeby to uwzględnić
 
+            // Jeżeli parentOfMin zwróciło null, to znaczy że rodzicem jest element nadrzędny względem obecnego
+            // A więc successorParent jest elementem usuwanym
             if (successorParent == nullptr) {
-                // successorParent = node;
+                successorParent = this;
                 successor = this->right;
+
+                successor->left = this->left;
             } else {
                 successor = successorParent->left;
-                successor->right = this->right;
-                successorParent->left = nullptr;                
-            }
 
-            successor->left = this->left;
+                successor->left = this->left;
+                successorParent->left = successor->right;
+                successor->right = this->right;
+            }
             
             return successor;
         }
