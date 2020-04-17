@@ -41,9 +41,6 @@ public:
         for (; begin < end; ++begin) {
             auto node = new AvlNode<T>(*begin);
             this->root = this->root->insert(node);
-
-            std::cerr << "Dodaję element " << *begin << '\n';
-            std::cerr << "Obecnie: " << this->traversePreOrder() << "\n\n";
         }
     }
 

@@ -27,13 +27,7 @@ struct AvlNode {
                 auto newSubtreeHeight = this->left->height();
                 this->treeHeight = std::max(this->treeHeight, 1 + newSubtreeHeight);
 
-                //TODO: naprawić drzewo poprzez rotacje
                 // dodajemy element po lewej stronie, więc drzewo mogło zostać przeciążone tylko w lewo
-                std::cerr << "Uwaga: " << this->traversePreOrder() << '\n';
-                std::cerr << "Balance factor (" << this->value << "): " << this->balanceFactor() << '\n';
-                std::cerr << "left height: " << (this->left != nullptr ? 1 + this->left->height() : 0) << '\n';
-                std::cerr << "right height: " << (this->right != nullptr ? 1 + this->right->height() : 0) << '\n';
-
                 if (this->balanceFactor() == 2) {
                     // Teraz musimy sprawdzić w które z poddrzew naszego dziecka
                     // został dodany element (to dodanie już wystąpiło)
@@ -62,13 +56,7 @@ struct AvlNode {
                 auto newSubtreeHeight = this->right->height();
                 this->treeHeight = std::max(this->treeHeight, 1 + newSubtreeHeight);
 
-                //TODO: naprawić drzewo poprzez rotacje
                 // dodajemy element z prawej strony, więc drzewo mogło zostać przeciążone tylko w prawo
-                std::cerr << "Uwaga: " << this->traversePreOrder() << '\n';
-                std::cerr << "Balance factor (" << this->value << "): " << this->balanceFactor() << '\n';
-                std::cerr << "left height: " << (this->left != nullptr ? 1 + this->left->height() : 0) << '\n';
-                std::cerr << "right height: " << (this->right != nullptr ? 1 + this->right->height() : 0) << '\n';
-
                 if (this->balanceFactor() == -2) {
                     if (node->value < this->right->value) {
                         // Podwójna rotacja

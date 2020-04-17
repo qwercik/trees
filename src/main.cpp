@@ -49,8 +49,4 @@ int main() {
     
     std::cout << tree.traversePreOrder() << '\n';
     std::cout << "Wysokość: " << tree.height() << '\n';
-
-    BinarySearchTree<int> b;
-    b.insertList(values.begin(), values.end());
-    std::cout << "Powinno wyjść: " << b.height() << "\n";
 }
