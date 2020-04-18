@@ -144,17 +144,16 @@ public:
                 }
             }
 
-            if (newNode != nullptr) {
-                newNode->updateHeight();
-                std::cerr << "Aktualizuję wysokości (" << newNode->value << ") - BF: " << newNode->balanceFactor() << "\n";
-            }
-
             for (; branchPointers.size() > 0; branchPointers.pop_back()) {
                 auto parent = branchPointers.back();
                 parent->updateHeight();
                 std::cerr << "Aktualizuję wysokości (" << parent->value << ") - BF: " << parent->balanceFactor() << "\n";
             }
             
+            if (newNode != nullptr) {
+                newNode->updateHeight();
+                std::cerr << "Aktualizuję wysokości (" << newNode->value << ") - BF: " << newNode->balanceFactor() << "\n";
+            }
 
             if (node != nullptr) {
                 delete node;
