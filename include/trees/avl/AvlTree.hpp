@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <list>
 #include <cmath>
 #include <trees/avl/AvlNode.hpp>
 #include <trees/avl/exceptions.hpp>
@@ -110,42 +111,53 @@ public:
         }
     }
 
+    // Iterative implementation
     void remove(T value) {
         if (this->root == nullptr) {
-            throw AvlTreeEmptyException("Tree is empty");
+            throw new AvlTreeEmptyException("Tree is empty");
         } else {
-            auto parentOfNodeToRemove = this->root->findParent(value);
-            AvlNode<T> *nodeToRemove;
-            bool leftChild;
+            std::list<AvlNode<T>*> branchPointers;
 
-            if (parentOfNodeToRemove == nullptr) {
-                nodeToRemove = this->root;
-            } else if (value < parentOfNodeToRemove->value) {
-                nodeToRemove = parentOfNodeToRemove->left;
-                leftChild = true;
-            } else {
-                nodeToRemove = parentOfNodeToRemove->right;
-                leftChild = false;
+            auto node = this->root;
+            
+            while (value != node->value) {
+                branchPointers.push_back(node);
+                node = value < node->value ? node->left : node->right;
+
+                if (node == nullptr) {
+                    throw AvlTreeElementNotExistException("Element not exist");
+                }
             }
 
-            auto newNode = nodeToRemove->remove();
+            // node to element który chcemy usunąć
+            auto newNode = node->remove();
 
-            if (nodeToRemove == this->root) {
-                if (nodeToRemove != nullptr) {
-                    delete nodeToRemove;
-                }
-
+            if (value == this->root->value) {
                 this->root = newNode;
             } else {
-                if (nodeToRemove != nullptr) {
-                    delete nodeToRemove;
-                }
-
-                if (leftChild) {
-                    parentOfNodeToRemove->left = newNode;
+                auto parent = branchPointers.back();
+                
+                if (value < parent->value) {
+                    parent->left = newNode;
                 } else {
-                    parentOfNodeToRemove->right = newNode;
+                    parent->right = newNode;
                 }
+            }
+
+            if (newNode != nullptr) {
+                newNode->updateHeight();
+                std::cerr << "Aktualizuję wysokości (" << newNode->value << ") - BF: " << newNode->balanceFactor() << "\n";
+            }
+
+            for (; branchPointers.size() > 0; branchPointers.pop_back()) {
+                auto parent = branchPointers.back();
+                parent->updateHeight();
+                std::cerr << "Aktualizuję wysokości (" << parent->value << ") - BF: " << parent->balanceFactor() << "\n";
+            }
+            
+
+            if (node != nullptr) {
+                delete node;
             }
         }
     }
@@ -202,6 +214,6 @@ public:
         }
     }
 
-private:
+//private:
     AvlNode<T> *root = nullptr;
 };

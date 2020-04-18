@@ -41,12 +41,38 @@ void test(const std::vector<T>& values) {
 }
 
 int main() {
-    // std::vector<int> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    std::vector<int> values = {6, 5, 4, 3, 2, 1, 10, 9, 8, 7, };
+    std::vector<int> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    //std::vector<int> values = {6, 5, 4, 3, 2, 1, 10, 9, 8, 7, };
 
     AvlTree<int> tree;
     tree.insertList(values.begin(), values.end());
     
     std::cout << tree.traversePreOrder() << '\n';
     std::cout << "Wysokość: " << tree.height() << '\n';
+
+    const int value = 6;
+    std::cout << "Uwaga, uwaga, uwaga - usuwam " << value << '\n';
+    tree.remove(value);
+    std::cout << tree.traversePreOrder() << '\n';
+    std::cout << "root bf: " << tree.root->balanceFactor() << '\n';
+    std::cout << "root l: " << 1 + tree.root->left->height() << '\n';
+    std::cout << "root r: " << 1 + tree.root->right->height() << '\n';
+    std::cerr << '\n';
+
+    tree.remove(8);
+    std::cout << "Usuwam 8\n";
+    std::cout << tree.traversePreOrder() << '\n';
+    std::cout << "root bf: " << tree.root->balanceFactor() << '\n';
+    std::cout << "root l: " << 1 + tree.root->left->height() << '\n';
+    std::cout << "root r: " << 1 + tree.root->right->height() << '\n';
+    std::cerr << '\n';
+
+
+    std::cout << "Usuwam 4\n";
+    tree.remove(4);
+    std::cout << tree.traversePreOrder() << '\n';
+    std::cout << "root bf: " << tree.root->balanceFactor() << '\n';
+    std::cout << "root l: " << 1 + tree.root->left->height() << '\n';
+    std::cout << "root r: " << 1 + tree.root->right->height() << '\n';
+    std::cerr << '\n';
 }

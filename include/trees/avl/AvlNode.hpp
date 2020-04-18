@@ -266,6 +266,11 @@ struct AvlNode {
     // Nie robi głębokiej aktualizacji, aktualizuje wyłącznie wysokość tego drzewa!
     // zwraca nową wysokość drzewa
     int updateHeight() {
+        // Może zmienić implementację?
+        // można by napisać jakiś wrapper na left->height i right->height, który obsłuży nullptr
+        // jest to często spotykany w tym kodzie wzorzec
+        // a potem zamienić wszystko na zwyczajne std::max()
+
         if (this->left != nullptr && this->right == nullptr) {
             this->treeHeight = this->left->treeHeight + 1;
         } else if (this->left == nullptr && this->right != nullptr) {
@@ -279,10 +284,10 @@ struct AvlNode {
         return this->treeHeight;
     }
 
-    // Parametrem node jest węzeł, który chcemy usunąć
-    // Zwracany jest wskaźnik na element, który go zastąpi
+    // Zwracany jest wskaźnik na element, który zastąpi usuwany węzeł
     // Wywołujący może zdealokować zaalokowaną dynamicznie pamięć,
     // bo posiada wskaźnik na usuwany węzeł
+
     AvlNode<T> *remove() {
         if (this->left == nullptr && this->right == nullptr) {
             return nullptr;
@@ -291,8 +296,15 @@ struct AvlNode {
         } else if (this->left == nullptr && this->right != nullptr) {
             return this->right;
         } else {
-            auto successorParent = this->right->parentOfMin();
+            std::list<AvlNode<T>*> parentsList;
+            auto node = this->right;
+            while (node->left != nullptr) {
+                parentsList.push_back(node);
+                node = node->left;
+            }
+            
             AvlNode<T> *successor;
+            auto successorParent = parentsList.back();
             // następnik (successor) na pewno nie ma lewego dziecka, więc można wartość wskaźnika nadpisywać
             // Za to może mieć prawe dziecko, więc trzeba pamiętać, żeby to uwzględnić
 
@@ -309,6 +321,12 @@ struct AvlNode {
                 successor->left = this->left;
                 successorParent->left = successor->right;
                 successor->right = this->right;
+            }
+
+            for (; parentsList.size() > 0; parentsList.pop_back()) {
+                auto parent = parentsList.back();
+                parent->updateHeight();
+                std::cerr << "Aktualizuję wysokości (" << parent->value << ") - BF: " << parent->balanceFactor() << "\n";
             }
             
             return successor;
