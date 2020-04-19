@@ -45,6 +45,14 @@ public:
         }
     }
 
+    // Root musi być pusty!
+    template <typename Iterator>
+    void insertSortedList(Iterator begin, Iterator end) {
+        this->root = new AvlNode<T>;
+        this->root->insertSortedList(begin, end);
+        this->root->updateHeightDeep();
+    }
+
     std::vector<T> traversePreOrder() const {
         if (this->root == nullptr) {
             return {};

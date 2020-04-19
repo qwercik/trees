@@ -46,6 +46,27 @@ struct AvlNode {
         }
     }
 
+    template <typename Iterator>
+    void insertSortedList(Iterator begin, Iterator end) {
+        if (begin >= end) {
+            return;
+        }
+
+        auto size = end - begin;
+        auto rootElement = begin + size / 2;
+        this->value = *rootElement;
+
+        if (begin < rootElement) {
+            this->left = new AvlNode<T>;
+            this->left->insertSortedList(begin, rootElement);
+        }
+
+        if (rootElement + 1 < end) {
+            this->right = new AvlNode<T>;
+            this->right->insertSortedList(rootElement + 1, end);
+        }
+    }
+
     std::vector<T> traversePreOrder() {
         std::vector<T> values;
 

@@ -62,7 +62,7 @@ std::vector<int> randomList(int n) {
 }
 
 void testAvl() {
-    std::vector<int> values = randomList(200);
+    std::vector<int> values = randomList(1000);
     std::cout << "Wstawiam listę: " << values << '\n';
 
     AvlTree<int> tree;
@@ -98,5 +98,10 @@ void testAvl() {
 int main() {
     std::srand(std::time(NULL));
 
-    testAvl();
+    AvlTree<int> tree;
+    std::vector<int> values = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+    tree.insertSortedList(values.begin(), values.end());
+
+    std::cout << tree.traversePreOrder() << '\n';
+    std::cout << tree.height() << '\n';
 }
