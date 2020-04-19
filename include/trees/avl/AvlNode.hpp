@@ -303,12 +303,6 @@ struct AvlNode {
 
             parentsList.push_front(successor);
 
-            /*std::cerr << "Wszystko co potrzeba: ";
-            for (auto &e : parentsList) {
-                std::cerr << e->value << ' ';
-            }
-            std::cerr << '\n';*/
-
             if (parentsList.size() > 0) {
                 auto previousVisitedParent = parentsList.back();
                 parentsList.pop_back();
@@ -370,29 +364,6 @@ struct AvlNode {
         
         return newRoot;
     }
-
-/*
-    AvlNode<T> *fixAvlIfBroken() {
-        if (this->balanceFactor() == 2) {
-            // Możemy być pewni, że istnieje lewy element, skoro BF = 2
-            if (this->left->balanceFactor() == 1) {
-                return this->rotateRight();
-            } else {
-                this->left = this->left->rotateLeft();
-                return this->rotateRight();
-            }
-        } else if (this->balanceFactor() == -2) {
-            if (this->right->balanceFactor() == -1) {
-                return this->rotateLeft();
-            } else {
-                this->right = this->right->rotateRight();
-                return this->rotateLeft();
-            }
-        } else {
-            return this;
-        }
-    }
-*/
 
     AvlNode<T> *fixAvlIfBroken() {
         if (this->balanceFactor() > 1) {

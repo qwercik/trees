@@ -153,15 +153,6 @@ public:
                 }
             }
 
-            /*
-            std::cerr << "Wskaźniki: ";
-            for (auto &e : branchPointers) {
-                std::cerr << e->value << ' ';
-            }
-            std::cerr << '\n';
-            */
-
-
             if (branchPointers.size() > 0) {
                 auto previousVisitedParent = branchPointers.back();
                 previousVisitedParent->updateHeight();
@@ -181,28 +172,6 @@ public:
 
                 this->root = previousVisitedParent->fixAvlIfBroken();
             }
-
-
-
-            /*if (branchPointers.size() > 0) {
-                auto it = branchPointers.rbegin();
-                auto parent = *it;
-                parent->updateHeight();
-                it++;
-                
-                for (; it != branchPointers.rend(); it++) {
-                    auto currentParent = *it;
-                    currentParent->updateHeight();
-
-                    if (parent->value < currentParent->value) {
-                        currentParent->left = currentParent->left->fixAvlIfBroken();
-                    } else {
-                        currentParent->right = currentParent->right->fixAvlIfBroken();
-                    }
-
-                    parent = currentParent;
-                }
-            }*/
 
             if (node != nullptr) {
                 delete node;
@@ -270,6 +239,6 @@ public:
         }
     }
 
-//private:
+private:
     AvlNode<T> *root = nullptr;
 };
