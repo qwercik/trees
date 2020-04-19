@@ -131,6 +131,9 @@ public:
 
             // node to element który chcemy usunąć
             auto newNode = node->remove();
+            if (newNode != nullptr) {
+                newNode->updateHeight();
+            }
 
             if (value == this->root->value) {
                 this->root = newNode;
@@ -139,21 +142,67 @@ public:
                 
                 if (value < parent->value) {
                     parent->left = newNode;
+                    if (newNode != nullptr) {
+                        parent->left = parent->left->fixAvlIfBroken();
+                    }
                 } else {
                     parent->right = newNode;
+                    if (newNode != nullptr) {
+                        parent->right = parent->right->fixAvlIfBroken();
+                    }
                 }
             }
 
-            for (; branchPointers.size() > 0; branchPointers.pop_back()) {
-                auto parent = branchPointers.back();
+            /*
+            std::cerr << "Wskaźniki: ";
+            for (auto &e : branchPointers) {
+                std::cerr << e->value << ' ';
+            }
+            std::cerr << '\n';
+            */
+
+
+            if (branchPointers.size() > 0) {
+                auto previousVisitedParent = branchPointers.back();
+                previousVisitedParent->updateHeight();
+                branchPointers.pop_back();
+
+                for (; branchPointers.size() > 0; branchPointers.pop_back()) {
+                    auto parent = branchPointers.back();
+                    parent->updateHeight();
+                    if (previousVisitedParent->value < parent->value) {
+                        parent->left = parent->left->fixAvlIfBroken();
+                    } else {
+                        parent->right = parent->right->fixAvlIfBroken();
+                    }
+
+                    previousVisitedParent = parent;
+                }
+
+                this->root = previousVisitedParent->fixAvlIfBroken();
+            }
+
+
+
+            /*if (branchPointers.size() > 0) {
+                auto it = branchPointers.rbegin();
+                auto parent = *it;
                 parent->updateHeight();
-                std::cerr << "Aktualizuję wysokości (" << parent->value << ") - BF: " << parent->balanceFactor() << "\n";
-            }
-            
-            if (newNode != nullptr) {
-                newNode->updateHeight();
-                std::cerr << "Aktualizuję wysokości (" << newNode->value << ") - BF: " << newNode->balanceFactor() << "\n";
-            }
+                it++;
+                
+                for (; it != branchPointers.rend(); it++) {
+                    auto currentParent = *it;
+                    currentParent->updateHeight();
+
+                    if (parent->value < currentParent->value) {
+                        currentParent->left = currentParent->left->fixAvlIfBroken();
+                    } else {
+                        currentParent->right = currentParent->right->fixAvlIfBroken();
+                    }
+
+                    parent = currentParent;
+                }
+            }*/
 
             if (node != nullptr) {
                 delete node;
@@ -210,6 +259,14 @@ public:
             }
 
             this->root = parentOfRoot.right;
+        }
+    }
+
+    bool correct(T &value) {
+        if (this->root == nullptr) {
+            return true;
+        } else {
+            return this->root->correct(value);
         }
     }
 

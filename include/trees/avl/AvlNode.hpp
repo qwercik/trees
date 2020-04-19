@@ -27,23 +27,7 @@ struct AvlNode {
                 auto newSubtreeHeight = this->left->height();
                 this->treeHeight = std::max(this->treeHeight, 1 + newSubtreeHeight);
 
-                // dodajemy element po lewej stronie, więc drzewo mogło zostać przeciążone tylko w lewo
-                if (this->balanceFactor() == 2) {
-                    // Teraz musimy sprawdzić w które z poddrzew naszego dziecka
-                    // został dodany element (to dodanie już wystąpiło)
-
-                    if (node->value < this->left->value) {
-                        // Pojedyncza rotacja
-                        return this->rotateRight();
-
-                    } else {
-                        // Podwójna rotacja
-                        this->left = this->left->rotateLeft();
-                        return this->rotateRight();
-                    }
-                } else {
-                    return this;
-                }
+                return this->fixAvlIfBroken();
             }
         } else {
             if (this->right == nullptr) {
@@ -57,18 +41,7 @@ struct AvlNode {
                 this->treeHeight = std::max(this->treeHeight, 1 + newSubtreeHeight);
 
                 // dodajemy element z prawej strony, więc drzewo mogło zostać przeciążone tylko w prawo
-                if (this->balanceFactor() == -2) {
-                    if (node->value < this->right->value) {
-                        // Podwójna rotacja
-                        this->right = this->right->rotateRight();
-                        return this->rotateLeft();
-                    } else {
-                        // Pojedyncza rotacja
-                        return this->rotateLeft();
-                    }
-                } else {
-                    return this;
-                }
+                return this->fixAvlIfBroken();
             }
         }
     }
@@ -232,11 +205,16 @@ struct AvlNode {
         return this->treeHeight;
     }
 
-    int balanceFactor() {
-        auto leftHeight = this->left != nullptr ? 1 + this->left->height() : 0;
-        auto rightHeight = this->right != nullptr ? 1 + this->right->height() : 0;
+    inline int leftHeight() {
+        return this->left != nullptr ? 1 + this->left->height() : 0;
+    }
 
-        return leftHeight - rightHeight;
+    inline int rightHeight() {
+        return this->right != nullptr ? 1 + this->right->height() : 0;
+    }
+
+    inline int balanceFactor() {
+        return this->leftHeight() - this->rightHeight();
     }
 
     // Aktualizuje wysokość obecnego węzła, WSZYSTKICH podwęzłów i zwraca nową wysokość obecnego węzła
@@ -323,10 +301,34 @@ struct AvlNode {
                 successor->right = this->right;
             }
 
-            for (; parentsList.size() > 0; parentsList.pop_back()) {
-                auto parent = parentsList.back();
-                parent->updateHeight();
-                std::cerr << "Aktualizuję wysokości (" << parent->value << ") - BF: " << parent->balanceFactor() << "\n";
+            parentsList.push_front(successor);
+
+            /*std::cerr << "Wszystko co potrzeba: ";
+            for (auto &e : parentsList) {
+                std::cerr << e->value << ' ';
+            }
+            std::cerr << '\n';*/
+
+            if (parentsList.size() > 0) {
+                auto previousVisitedParent = parentsList.back();
+                parentsList.pop_back();
+                previousVisitedParent->updateHeight();
+                
+                for (; parentsList.size() > 0; parentsList.pop_back()) {
+                    auto parent = parentsList.back();
+                    parent->updateHeight();
+
+                    if (previousVisitedParent->value < parent->value) {
+                        parent->left = parent->left->fixAvlIfBroken();
+                    } else {
+                        parent->right = parent->right->fixAvlIfBroken();
+                    }
+
+                    previousVisitedParent = parent;
+                }
+
+                //std::cerr << "Kto to będzie sukcesorem: " << previousVisitedParent->value << '\n';
+                successor = previousVisitedParent->fixAvlIfBroken();
             }
             
             return successor;
@@ -368,6 +370,53 @@ struct AvlNode {
         
         return newRoot;
     }
+
+
+    AvlNode<T> *fixAvlIfBroken() {
+        if (this->balanceFactor() == 2) {
+            // Możemy być pewni, że istnieje lewy element, skoro BF = 2
+            if (this->left->balanceFactor() == 1) {
+                return this->rotateRight();
+            } else {
+                this->left = this->left->rotateLeft();
+                return this->rotateRight();
+            }
+        } else if (this->balanceFactor() == -2) {
+            if (this->right->balanceFactor() == -1) {
+                return this->rotateLeft();
+            } else {
+                this->right = this->right->rotateRight();
+                return this->rotateLeft();
+            }
+        } else {
+            return this;
+        }
+    }
+
+    // Czy ta funkcja jest dobrze napisana?
+    bool correct(T &value) {
+        if (this->balanceFactor() < -1 || this->balanceFactor() > 1) {
+            value = this->value;
+            return false;
+        }
+
+        bool ok = true;
+
+        if (this->left != nullptr) {
+            if (!this->left->correct(value)) {
+                return false;
+            }
+        }
+
+        if (this->right != nullptr) {
+            if (!this->right->correct(value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 
     T value;
     AvlNode *left = nullptr;
