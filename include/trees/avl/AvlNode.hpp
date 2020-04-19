@@ -371,7 +371,7 @@ struct AvlNode {
         return newRoot;
     }
 
-
+/*
     AvlNode<T> *fixAvlIfBroken() {
         if (this->balanceFactor() == 2) {
             // Możemy być pewni, że istnieje lewy element, skoro BF = 2
@@ -383,6 +383,27 @@ struct AvlNode {
             }
         } else if (this->balanceFactor() == -2) {
             if (this->right->balanceFactor() == -1) {
+                return this->rotateLeft();
+            } else {
+                this->right = this->right->rotateRight();
+                return this->rotateLeft();
+            }
+        } else {
+            return this;
+        }
+    }
+*/
+
+    AvlNode<T> *fixAvlIfBroken() {
+        if (this->balanceFactor() > 1) {
+            if (this->left->balanceFactor() >= 0) {
+                return this->rotateRight();
+            } else {
+                this->left = this->left->rotateLeft();
+                return this->rotateRight();
+            }
+        } else if (this->balanceFactor() < -1) {
+            if (this->right->balanceFactor() <= 0) {
                 return this->rotateLeft();
             } else {
                 this->right = this->right->rotateRight();

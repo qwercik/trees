@@ -65,16 +65,16 @@ std::vector<int> randomList(int n) {
 int main() {
     std::srand(std::time(NULL));
 
-    std::vector<int> values = {5, 19, 16, 17, 10, 18, 7, 13, 8, 12, 6, 4, 9, 11, 2};
-    //std::vector<int> values = randomList(30);
+    //std::vector<int> values = {5, 19, 16, 17, 10, 18, 7, 13, 8, 12, 6, 4, 9, 11, 2};
+    std::vector<int> values = randomList(100);
     std::cout << "Wstawiam listę: " << values << '\n';
 
     AvlTree<int> tree;
     tree.insertList(values.begin(), values.end());
     std::cout << "Po wstawieniu: " << tree.traversePreOrder() << '\n';
 
-    //std::random_shuffle(values.begin(), values.end());
-    values = {16, 4, 11, 18, 19, 17, 2, 12, 8, 7, 9, 6, 13, 5, 10};
+    std::random_shuffle(values.begin(), values.end());
+    //values = {16, 4, 11, 18, 19, 17, 2, 12, 8, 7, 9, 6, 13, 5, 10};
     std::cout << "Mieszamy listę: " << values << '\n';
 
 
