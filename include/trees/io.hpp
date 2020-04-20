@@ -19,3 +19,14 @@ std::ostream& operator<<(std::ostream& stream, const std::vector<T>& vector) {
 
     return stream;
 }
+
+template <typename T>
+std::vector<T> readList(std::istream& stream = std::cin) {
+    std::vector<T> values;
+    T value;
+    while (stream >> value) {
+        values.push_back(value);
+    }
+
+    return values;
+}
