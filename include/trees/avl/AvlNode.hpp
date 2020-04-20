@@ -350,7 +350,6 @@ struct AvlNode {
         }
     }
 
-    // Parametrem jest korzeń względem którego przeprowadzamy rotację
     // wartością zwaracaną jest wskaźnik na nowy korzeń
     AvlNode<T> *rotateLeft() {
         auto newRoot = this->right;
@@ -387,14 +386,14 @@ struct AvlNode {
     }
 
     AvlNode<T> *fixAvlIfBroken() {
-        if (this->balanceFactor() > 1) {
+        if (this->balanceFactor() == 2) {
             if (this->left->balanceFactor() >= 0) {
                 return this->rotateRight();
             } else {
                 this->left = this->left->rotateLeft();
                 return this->rotateRight();
             }
-        } else if (this->balanceFactor() < -1) {
+        } else if (this->balanceFactor() == -2) {
             if (this->right->balanceFactor() <= 0) {
                 return this->rotateLeft();
             } else {
@@ -406,7 +405,6 @@ struct AvlNode {
         }
     }
 
-    // Czy ta funkcja jest dobrze napisana?
     bool correct(T &value) {
         if (this->balanceFactor() < -1 || this->balanceFactor() > 1) {
             value = this->value;
