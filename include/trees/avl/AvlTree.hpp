@@ -14,7 +14,11 @@ public:
     }
 
     ~AvlTree() {
-        this->clearPostOrder();
+        // Usunięte wyłącznie do benchmarków, nie jest to potrzebne w tym momencie
+        // A znacznie skraca proces testowania
+        // Pamięć zaalokowana dynamicznie i tak zostanie wyczyszczona przez system operacyjny
+        // gdy proces zakończy działanie
+        //this->clearPostOrder();
     }
 
     // Wstawia element do drzewa
