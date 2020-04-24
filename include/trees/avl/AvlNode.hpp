@@ -67,58 +67,40 @@ struct AvlNode {
         }
     }
 
-    std::list<T> traversePreOrder() {
-        std::list<T> values;
-
-        values.push_back(this->value);
+    void traversePreOrder(std::list<T> &trace) {
+        trace.push_back(this->value);
 
         if (this->left != nullptr) {
-            auto returnedValues = this->left->traversePreOrder();
-            values.insert(values.end(), returnedValues.begin(), returnedValues.end());
+            this->left->traversePreOrder(trace);
         }
 
         if (this->right != nullptr) {
-            auto returnedValues = this->right->traversePreOrder();
-            values.insert(values.end(), returnedValues.begin(), returnedValues.end());
+            this->right->traversePreOrder(trace);
         }
-
-        return values;
     }
 
-    std::list<T> traverseInOrder() {
-        std::list<T> values;
-
+    void traverseInOrder(std::list<T> &trace) {
         if (this->left != nullptr) {
-            auto returnedValues = this->left->traverseInOrder();
-            values.insert(values.end(), returnedValues.begin(), returnedValues.end());
+            this->left->traverseInOrder(trace);
         }
 
-        values.push_back(this->value);
+        trace.push_back(this->value);
 
         if (this->right != nullptr) {
-            auto returnedValues = this->right->traverseInOrder();
-            values.insert(values.end(), returnedValues.begin(), returnedValues.end());
+            this->right->traverseInOrder(trace);
         }
-
-        return values;
     }
 
-    std::list<T> traversePostOrder() {
-        std::list<T> values;
-
+    void traversePostOrder(std::list<T> &trace) {
         if (this->left != nullptr) {
-            auto returnedValues = this->left->traversePostOrder();
-            values.insert(values.end(), returnedValues.begin(), returnedValues.end());
+            this->left->traversePostOrder(trace);
         }
 
         if (this->right != nullptr) {
-            auto returnedValues = this->right->traversePostOrder();
-            values.insert(values.end(), returnedValues.begin(), returnedValues.end());
+            this->right->traversePostOrder(trace);
         }
 
-        values.push_back(this->value);
-
-        return values;
+        trace.push_back(this->value);
     }
 
     // Zwraca nullptr, jeżeli to obecny węzeł jest szukanym elementem

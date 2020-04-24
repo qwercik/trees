@@ -13,10 +13,6 @@ public:
     }
 
     ~AvlTree() {
-        // Usunięte wyłącznie do benchmarków, nie jest to potrzebne w tym momencie
-        // A znacznie skraca proces testowania
-        // Pamięć zaalokowana dynamicznie i tak zostanie wyczyszczona przez system operacyjny
-        // gdy proces zakończy działanie
         //this->clearPostOrder();
     }
 
@@ -60,7 +56,9 @@ public:
         if (this->root == nullptr) {
             return {};
         } else {
-            return this->root->traversePreOrder();
+            std::list<T> trace;
+            this->root->traversePreOrder(trace);
+            return trace;
         }
     }
 
@@ -68,39 +66,19 @@ public:
         if (this->root == nullptr) {
             return {};
         } else {
-            return this->root->traverseInOrder();
+            std::list<T> trace;
+            this->root->traverseInOrder(trace);
+            return trace;
         }
     }
-
-
-    std::list<T> traverseInOrderIterative() const {
-        std::list<T> trace;
-        if (this->root != nullptr) {
-            std::stack<AvlNode<T>*> parents;
-            auto node = this->root;
-
-            while (!(parents.empty() && node == nullptr)) {
-                if (node != nullptr) {
-                    parents.push(node);
-                    node = node->left;
-                } else {
-                    node = parents.top();
-                    parents.pop();
-                    trace.push_back(node->value);
-                    node = node->right;
-                }
-            }
-        }
-
-        return trace;
-    }
-
 
     std::list<T> traversePostOrder() const {
         if (this->root == nullptr) {
             return {};
         } else {
-            return this->root->traversePostOrder();
+            std::list<T> trace;
+            this->root->traversePostOrder(trace);
+            return trace;
         }
     }
 

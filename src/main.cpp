@@ -20,7 +20,7 @@
 #include <sys/resource.h>
 
 void requestMoreStackSize() {
-	const rlim_t newSize = 1024L * 1024L * 1024L;
+	const rlim_t newSize = 4L * 1024L * 1024L * 1024L;
 	rlimit rl;
 	int result;
 	result = getrlimit(RLIMIT_STACK, &rl);

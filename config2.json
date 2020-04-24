@@ -3,8 +3,8 @@
 		{
 			"name": "Wypisanie drzewa metodą in-order",
 			"size_range": {
-				"start": 10000,
-				"step": 10000,
+				"start": 5000000,
+				"step": 5000000,
 				"count": 10
 			},
 			"repeats": 1,

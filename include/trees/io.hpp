@@ -5,8 +5,8 @@
 
 #define DBG(x) std::cerr << "[DBG] " << #x << " = " << x << '\n';
 
-template <typename T, typename Container>
-std::ostream& operator<<(std::ostream& stream, const Container& vector) {
+template <typename T>
+std::ostream& operator<<(std::ostream& stream, const std::vector<T>& vector) {
     const std::string SEPARATOR = ", ";
 
     if (vector.size() != 0) {
@@ -19,6 +19,20 @@ std::ostream& operator<<(std::ostream& stream, const Container& vector) {
 
     return stream;
 }
+
+template <typename T>
+std::ostream& operator<<(std::ostream& stream, const std::list<T>& list) {
+    const std::string SEPARATOR = ", ";
+    std::string delimiter;
+
+    for (const auto &element : list) {
+        std::cout << delimiter << element;
+        delimiter = SEPARATOR;
+    }
+
+    return stream;
+}
+
 
 
 template <typename T>
