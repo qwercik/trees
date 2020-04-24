@@ -13,7 +13,7 @@ public:
     }
 
     ~BinarySearchTree() {
-        //this->clearPostOrder();
+        this->clearPostOrder();
     }
 
     // Wstawia element do drzewa

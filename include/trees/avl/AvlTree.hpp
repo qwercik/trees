@@ -13,7 +13,7 @@ public:
     }
 
     ~AvlTree() {
-        //this->clearPostOrder();
+        this->clearPostOrder();
     }
 
     // Wstawia element do drzewa
