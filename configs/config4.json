@@ -1,0 +1,18 @@
+{
+	"tests": [
+		{
+			"name": "Wypisanie drzewa metodą in-order",
+			"size_range": {
+				"start": 10000,
+				"step": 10000,
+				"count": 10
+			},
+			"repeats": 1,
+			"generate_function": "descending",
+			"applications": [
+				{ "name": "Drzewo BST", "command": "./trees/build/trees bst print", "external_timer": true },
+				{ "name": "Drzewo AVL", "command": "./trees/build/trees avl print", "external_timer": true }
+			]
+		}
+	]
+}

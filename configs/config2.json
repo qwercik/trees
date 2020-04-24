@@ -1,0 +1,17 @@
+{
+	"tests": [
+		{
+			"name": "Równoważenie drzewa algorytmem DSW",
+			"size_range": {
+				"start": 10000000,
+				"step": 10000000,
+				"count": 10
+			},
+			"repeats": 1,
+			"generate_function": "descending",
+			"applications": [
+				{ "name": "Drzewo BST", "command": "./trees/build/trees bst dsw", "external_timer": true }
+			]
+		}
+	]
+}

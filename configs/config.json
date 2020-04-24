@@ -3,8 +3,8 @@
 		{
 			"name": "Tworzenie drzewa",
 			"size_range": {
-				"start": 1000,
-				"step": 1000,
+				"start": 20000,
+				"step": 20000,
 				"count": 10
 			},
 			"repeats": 5,
@@ -17,8 +17,8 @@
 		{
 			"name": "Poszukiwanie najmniejszego elementu",
 			"size_range": {
-				"start": 1000,
-				"step": 1000,
+				"start": 20000,
+				"step": 20000,
 				"count": 10
 			},
 			"repeats": 5,
@@ -31,8 +31,8 @@
 		{
 			"name": "Wypisanie drzewa metodą in-order",
 			"size_range": {
-				"start": 1000,
-				"step": 1000,
+				"start": 20000,
+				"step": 20000,
 				"count": 10
 			},
 			"repeats": 5,
@@ -45,8 +45,8 @@
 		{
 			"name": "Równoważenie drzewa algorytmem DSW",
 			"size_range": {
-				"start": 1000,
-				"step": 1000,
+				"start": 20000,
+				"step": 20000,
 				"count": 10
 			},
 			"repeats": 5,

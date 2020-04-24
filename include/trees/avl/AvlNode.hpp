@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <list>
 #include <trees/avl/exceptions.hpp>
 
 template <typename T>
@@ -67,8 +67,8 @@ struct AvlNode {
         }
     }
 
-    std::vector<T> traversePreOrder() {
-        std::vector<T> values;
+    std::list<T> traversePreOrder() {
+        std::list<T> values;
 
         values.push_back(this->value);
 
@@ -85,8 +85,8 @@ struct AvlNode {
         return values;
     }
 
-    std::vector<T> traverseInOrder() {
-        std::vector<T> values;
+    std::list<T> traverseInOrder() {
+        std::list<T> values;
 
         if (this->left != nullptr) {
             auto returnedValues = this->left->traverseInOrder();
@@ -103,8 +103,8 @@ struct AvlNode {
         return values;
     }
 
-    std::vector<T> traversePostOrder() {
-        std::vector<T> values;
+    std::list<T> traversePostOrder() {
+        std::list<T> values;
 
         if (this->left != nullptr) {
             auto returnedValues = this->left->traversePostOrder();
@@ -194,8 +194,8 @@ struct AvlNode {
         return this;
     }
 
-    std::vector<T> trace(T value) {
-        std::vector<T> track = {this->value};
+    std::list<T> trace(T value) {
+        std::list<T> track = {this->value};
 
         if (value < this->value && this->left != nullptr) {
             auto subTrack = this->left->trace(value);

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <list>
 #include <cmath>
 #include <trees/avl/AvlNode.hpp>
@@ -57,7 +56,7 @@ public:
         this->root->updateHeightDeep();
     }
 
-    std::vector<T> traversePreOrder() const {
+    std::list<T> traversePreOrder() const {
         if (this->root == nullptr) {
             return {};
         } else {
@@ -65,7 +64,7 @@ public:
         }
     }
 
-    std::vector<T> traverseInOrder() const {
+    std::list<T> traverseInOrder() const {
         if (this->root == nullptr) {
             return {};
         } else {
@@ -73,7 +72,31 @@ public:
         }
     }
 
-    std::vector<T> traversePostOrder() const {
+
+    std::list<T> traverseInOrderIterative() const {
+        std::list<T> trace;
+        if (this->root != nullptr) {
+            std::stack<AvlNode<T>*> parents;
+            auto node = this->root;
+
+            while (!(parents.empty() && node == nullptr)) {
+                if (node != nullptr) {
+                    parents.push(node);
+                    node = node->left;
+                } else {
+                    node = parents.top();
+                    parents.pop();
+                    trace.push_back(node->value);
+                    node = node->right;
+                }
+            }
+        }
+
+        return trace;
+    }
+
+
+    std::list<T> traversePostOrder() const {
         if (this->root == nullptr) {
             return {};
         } else {
@@ -90,6 +113,19 @@ public:
         }
     }
 
+    T minIterative() const {
+        if (this->root == nullptr) {
+            throw AvlTreeEmptyException("Tree is empty");
+        } else {
+            auto node = this->root;
+            while (node->left != nullptr) {
+                node = node->left;
+            }
+
+            return node->value;
+        }
+    }
+
     T max() const {
         if (this->root == nullptr) {
             throw AvlTreeEmptyException("Tree is empty");
@@ -99,7 +135,7 @@ public:
         }
     }
 
-    std::vector<T> trace(T value) const {
+    std::list<T> trace(T value) const {
         if (this->root == nullptr) {
             throw AvlTreeElementNotExistException("Element not exist");
         } else {

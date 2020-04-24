@@ -1,11 +1,3 @@
-// Uwaga!!!
-// Ten kod (main.cpp) to istny śmietnik, także proszę nie przywiązywać do niego większej uwagi
-// Został napisany wyłącznie w celu przetestowania klas drzewa
-// Struktura kodu w tym pliku jest mało ciekawa, żebym nie wyraził się dosadniej
-
-// Interesujące rzeczy można znaleźć w katalogu include/trees, tam znajdują się szablony klas drzew BST i AVL
-// Ich kod również "nie powala", gdybym miał więcej czasu to bym go przepisał, przy okazji np. pozbywając sie rekurencji
-
 #include <iostream>
 #include <algorithm>
 #include <chrono>
@@ -20,7 +12,7 @@
 #include <sys/resource.h>
 
 void requestMoreStackSize() {
-	const rlim_t newSize = 1024L * 1024L * 1024L;
+	const rlim_t newSize = 64L * 1024L * 1024L;
 	rlimit rl;
 	int result;
 	result = getrlimit(RLIMIT_STACK, &rl);
@@ -45,6 +37,7 @@ double measureExecutionTime(std::function<void()> callback) {
     return milliseconds / 1000.;
 }
 
+// Tak, wiem że ten kod jakością nie powala, ale był pisany "na szybko", tylko w celach testowych
 int main(int argc, char *argv[]) {
 	requestMoreStackSize();
 
@@ -74,15 +67,15 @@ int main(int argc, char *argv[]) {
         } else if (operation == "find-min") {
             BinarySearchTree<int> tree;
             auto values = readList<int>();
-            tree.fakeInsertLeft(values.begin(), values.end());
+            tree.insertList(values.begin(), values.end());
 
             std::cout << measureExecutionTime([&]() {
-                auto min = tree.minIterative();
+                auto min = tree.min();
             }) << '\n';
         } else if (operation == "print") {
             BinarySearchTree<int> tree;
             auto values = readList<int>();
-            tree.fakeInsertLeft(values.begin(), values.end());
+            tree.insertList(values.begin(), values.end());
 
             std::cout << measureExecutionTime([&]() {
                 auto data = tree.traverseInOrder();
@@ -90,11 +83,13 @@ int main(int argc, char *argv[]) {
         } else if (operation == "dsw") {
             BinarySearchTree<int> tree;
             auto values = readList<int>();
-            tree.fakeInsertLeft(values.begin(), values.end());
+            tree.insertList(values.begin(), values.end());
 
             std::cout << measureExecutionTime([&]() {
                 tree.dsw();
             }) << '\n';
+
+            std::cerr << "Wys: " << tree.height() << '\n';
         } else {
             std::cerr << "Unknown operation\n";
             return EXIT_FAILURE;
@@ -113,7 +108,7 @@ int main(int argc, char *argv[]) {
             tree.insertList(values.begin(), values.end());
 
             std::cout << measureExecutionTime([&]() {
-                auto min = tree.minIterative();
+                auto min = tree.min();
             }) << '\n';
         } else if (operation == "print") {
             AvlTree<int> tree;
